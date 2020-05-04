@@ -94,7 +94,7 @@ var myMap = L.map("map", {
         return div;
     };
     
-    legend.addTo(myMap);
+    // legend.addTo(myMap);
     
   });
   

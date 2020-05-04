@@ -1,28 +1,37 @@
+html,
 body {
-    padding: 0;
-    margin: 0;
-  }
+  height: 100%;
+  width: 100%;
+}
   
-  #map,
-  body,
-  html {
-    height: 100%;
-  }
+.legend {
+  line-height: 18px;
+  color: #555;
+  background-color: white;
+  padding: 12px;
+  width: 50px;
+  height: 120px;
+}
   
-  .legend {
-    line-height: 18px;
-    color: #555;
-    background-color: white;
-    padding: 12px;
-    width: 50px;
-    height: 120px;
-  }
+.legend i {
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin-right: 8px;
+  opacity: 0.7;
+}
   
-  .legend i {
-    width: 18px;
-    height: 18px;
-    float: left;
-    margin-right: 8px;
-    opacity: 0.7;
-  }
-  
+
+
+#map {
+  position: relative;
+  /* border: 1px solid black; */
+  border-radius: 8px;
+  height: 400px;
+  width: 100%;
+}
+
+@font-face {
+  font-family: sweetpurple;
+  src: url('fonts/sweet purple.ttf');
+}
