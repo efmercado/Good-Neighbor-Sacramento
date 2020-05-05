@@ -26,7 +26,6 @@ body {
 #map {
   position: relative;
   /* border: 1px solid black; */
-  border-radius: 8px;
   height: 400px;
   width: 100%;
 }
@@ -34,4 +33,27 @@ body {
 @font-face {
   font-family: sweetpurple;
   src: url('fonts/sweet purple.ttf');
+}
+
+.no-padding {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  /* text-shadow: 3px 3px grey; */
+}
+
+.description {
+  
+}
+
+.description{
+  font-family: sweetpurple;
 }
