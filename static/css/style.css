@@ -50,9 +50,6 @@ body {
   /* text-shadow: 3px 3px grey; */
 }
 
-.description {
-  
-}
 
 .description{
   font-family: sweetpurple;
@@ -65,4 +62,7 @@ body {
 
 .blue {
   stroke:blue;
+
+.districts {
+  cursor: pointer;
 }
