@@ -37,7 +37,6 @@ var myMap = L.map("map", {
 
   // Grabbing our GeoJSON data..
   d3.json(link, function(data) {
-    console.log(data)
     // Creating a GeoJSON layer with the retrieved data
     L.geoJson(data, {
         // Style each feature (in this case a district)
