@@ -50,10 +50,13 @@ body {
   /* text-shadow: 3px 3px grey; */
 }
 
-.description {
-  
-}
 
 .description{
   font-family: sweetpurple;
+}
+
+.districts
+{
+  cursor: pointer;
+
 }
