@@ -39,7 +39,6 @@ d3.json(crime, function(crimeData){
         // data.Occurence_Date = data.Occurence_Date.toLocaleDateString()
     })
 
-    console.log("crimmmeeee", crimeData)
     var beat = crimeData.map(object => object.Beat)
     var crimes = crimeData.map(object => object.Offense_Category)
 
@@ -53,47 +52,76 @@ d3.json(crime, function(crimeData){
         .mapValues(items => _.map(items, 'Offense_Category'))
         .value()
 
-    function dictionary(array){
+    crimeLineGraph(crimeByDate)
 
-        var newDictionary = {};
-    
-        array.forEach(function(item){
-            var date = item[0];
+});
 
-            newDictionary[date] = parameterCount(item[1])
+function dictionary(array){
+
+    var newDictionary = {};
+
+    array.forEach(function(item){
+        var date = item[0];
+
+        newDictionary[date] = parameterCount(item[1])
+    })
+    return newDictionary
+}
+
+
+function crimeLineGraph(crimeObject){
+
+    var crimeByDateArr = JSON.parse(JSON.stringify(Object.entries(dictionary(Object.entries(crimeObject)))));
+
+    function objectIter(arr){
+        var array = arr.map(data => data[1])
+        var newArray = []
+        array.forEach(function(arrayItem) {
+            count = 0
+            for(const [key, value] of Object.entries(arrayItem)){
+                count += value
+            }
+            newArray.push(count)
         })
-        console.log(newDictionary);
-        return newDictionary
-    }
+        return newArray
+    };
 
-    dictionary(Object.entries(crimeByDate))
+    objectIter(crimeByDateArr)
+
+    var crimeCountArr = []
+    for(var i=0; i<crimeByDateArr.length; i++){
+        
+        crimeCountArr.push([crimeByDateArr[i][0], objectIter(crimeByDateArr)[i]])
+    }
 
     var parseTime = d3.timeParse("%Y-%e-%d");
 
     var xTimeScale = d3.scaleTime()
-        .domain(d3.extent(Object.keys(crimeByDate), d => parseTime(d)))
+        .domain(d3.extent(crimeCountArr, d => parseTime(d[0])))
         .range([0, chartWidth]);
 
     var yLinearScale = d3.scaleLinear()
-        .domain([0, d3.max(Object.values(parameterCount(crimes)))])
+        .domain([0, d3.max(objectIter(crimeByDateArr))])
         .range([chartHeight, 0])
 
     var bottomAxis = d3.axisBottom(xTimeScale).tickFormat(d3.timeFormat("%d-%b"))
     var leftAxis = d3.axisLeft(yLinearScale)
 
-    // var drawLine = d3
-    // .line()
-    // .x(crimeByDate => xTimeScale(Object.keys(parseTime(crimeByDate))))
-    // .y(crimeByDate[0] => yLinearScale(Object.values(crimeByDate[0])));
-
     lineGroup.append("g")
-    .call(bottomAxis)
-    .attr("transform", `translate(0, ${chartHeight})`)
+        .call(bottomAxis)
+        .attr("transform", `translate(0, ${chartHeight})`)
 
     lineGroup.append("g")
         .call(leftAxis)
 
-});
+    var drawLine = d3.line()
+        .x(crimeDate => xTimeScale((parseTime(crimeDate[0]))))
+        .y(crimeDate => yLinearScale(crimeDate[1]));
+
+    lineGroup.append("path")
+        .attr("d", drawLine(crimeCountArr))
+        .classed("line blue", true)
+}
 
 
 function parameterCount(array){

@@ -57,3 +57,12 @@ body {
 .description{
   font-family: sweetpurple;
 }
+
+.line {
+  fill: none;
+  stroke-width: 2px;
+}
+
+.blue {
+  stroke:blue;
+}
