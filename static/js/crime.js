@@ -7,7 +7,7 @@ var svgHeight = 500;
 var margin = {
     top: 20,
     bottom: 120,
-    left: 50,
+    left: 60,
     right: 40
 };
 
@@ -68,25 +68,22 @@ function dictionary(array){
     return newDictionary
 }
 
+function objectIter(arr){
+    var array = arr.map(data => data[1])
+    var newArray = []
+    array.forEach(function(arrayItem) {
+        count = 0
+        for(const [key, value] of Object.entries(arrayItem)){
+            count += value
+        }
+        newArray.push(count)
+    })
+    return newArray
+};
 
 function crimeLineGraph(crimeObject){
 
     var crimeByDateArr = JSON.parse(JSON.stringify(Object.entries(dictionary(Object.entries(crimeObject)))));
-
-    function objectIter(arr){
-        var array = arr.map(data => data[1])
-        var newArray = []
-        array.forEach(function(arrayItem) {
-            count = 0
-            for(const [key, value] of Object.entries(arrayItem)){
-                count += value
-            }
-            newArray.push(count)
-        })
-        return newArray
-    };
-
-    objectIter(crimeByDateArr)
 
     var crimeCountArr = []
     for(var i=0; i<crimeByDateArr.length; i++){
