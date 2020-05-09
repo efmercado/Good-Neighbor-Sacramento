@@ -4,6 +4,12 @@ from flask import Flask, render_template
 import pymongo
 import json
 
+import pandas as pd
+import numpy as np
+
+from pprint import pprint
+
+
 # Create an instance of our Flask app.
 app = Flask(__name__)
 
@@ -14,51 +20,26 @@ conn = 'mongodb://localhost:27017'
 client = pymongo.MongoClient(conn)
 
 # Connect to a database. Will create one if not already available.
-
-
-db = client['countries_db']
-collection_currency = db['currency']
-with open('currencies.json') as f:
-    file_data = json.load(f)
-
-# if pymongo < 3.0, use insert()
-collection_currency.insert(file_data)
-# if pymongo >= 3.0 use insert_one() for inserting one document
-collection_currency.insert_one(file_data)
-# if pymongo >= 3.0 use insert_many() for inserting many documents
-collection_currency.insert_many(file_data)
-
-client.close()
-
-
-db = client.team_db
+db = client.realestate_db
 # Drops collection if available to remove duplicates
-db.team.drop()
+db.realestate.drop()
 
-# Creates a collection in the database and inserts two documents
-db.team.insert_many(
-    [
-        {
-            'player': 'Jessica',
-            'position': 'Point Guard'
-        },
-        {
-            'player': 'Mark',
-            'position': 'Center'
-        }
-    ]
-)
+
+df = pd.read_csv("./static/data/rdc_realestate_historial_data.csv")
+data_json = json.loads(df.to_json(orient='records'))
+db.realestate.insert_many(data_json)
+
+db.realestate.find()
 
 
 # Set route
 @app.route('/')
 def index():
-    # Store the entire team collection in a list
-    teams = list(db.team.find())
-    print(teams)
+
+    record = list(db.realestate.find())
 
     # Return the template with the teams list passed in
-    return render_template('index.html', teams=teams)
+    return render_template('index.html', record=record)
 
 
 if __name__ == "__main__":
