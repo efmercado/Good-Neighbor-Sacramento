@@ -1,19 +1,31 @@
 var link = "static/data/police_beats.geojson"
+var districts = "static/data/police_districts.geojson"
 
 // Creating the map object
-var myMap2 = L.map("map", {
-  center: [38.5816, -121.4944],
-  zoom: 10
-});
+// var myMap2 = L.map("map", {
+//   center: [38.5816, -121.4944],
+//   zoom: 10
+// });
 
   // Adding the tile layer
-L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
+var runBikeHike = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
   attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
   maxZoom: 18,
   id: "mapbox.run-bike-hike",
   accessToken: API_KEY
-}).addTo(myMap2);
-  
+});
+
+var light = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+  attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+  maxZoom: 18,
+  id: 'mapbox/light-v10',
+  tileSize: 512,
+  zoomOffset: -1,
+  accessToken: API_KEY
+})
+
+// ---------------------------------------------------------------------------------------- //
+
 // Grabbing the GeoJSON data
 d3.json(link, function(data) {
 
@@ -67,36 +79,127 @@ d3.json(link, function(data) {
     
     // Adding the crime count by beat onto the GeoJSON dictionary/object
     beatCrimeCount.forEach((item, i) => dataDictionary[i]["Crime__Count"] = item[1])
+  
+// ---------------------------------------------------------------------------------------- //
         
     // Creating a GeoJSON layer with the retrieved GeoJSON data
-    geojson = L.choropleth(data, {
+    var geojson = L.choropleth(data, {
 
-      // Defining what propety in the features to use
-      valueProperty: "Crime__Count",
+              // Defining what propety in the features to use
+              valueProperty: "Crime__Count",
 
-      // Setting the color Scale
-      scale: ["#ffffb2", "#b10026"],
+              // Setting the color Scale
+              scale: ["#ffffb2", "#b10026"],
 
-      // Number of breaks in step range
-      steps: 10,
+              // Number of breaks in step range
+              steps: 10,
 
-      // q for quartile, e for equidistant, k for k-means this case we are using quartile
-      mode: "q",
+              // q for quartile, e for equidistant, k for k-means this case we are using quartile
+              mode: "q",
 
-      // Adding style
-      style: {
-        // Border color
-        color: "#fff",
-        weight: 1,
-        fillOpacity: 0.8
-      },
+              // Adding style
+              style: {
+                // Border color
+                color: "#fff",
+                weight: 1,
+                fillOpacity: 0.8
+              },
 
-      // Bindind a pop-up to each layer
-      onEachFeature: function(feature, layer){
-        layer.bindPopup(`Beat: ${feature.properties.BEAT} <hr> Crime Count: ${feature.properties.Crime__Count}`)
+              // Bindind a pop-up to each layer
+              onEachFeature: function(feature, layer){
+                layer.bindPopup(`Beat: ${feature.properties.BEAT} <hr> Crime Count: ${feature.properties.Crime__Count}`)
+              }
+              })
+
+    d3.json(districts, function(districtData) {
+
+      // Grouping crime data by District
+      const groupedDistrict = _.groupBy(crimeData, 'Police_District')
+      
+
+      // Creating an array of offense for each District
+      const crimeByDistrict =  _.mapValues(groupedDistrict, items => _.map(items, 'Offense_Category'))
+
+      // Counting the number of offenses for each district and storing in a dictionary
+      var districtDictionary = {}
+      Object.entries(crimeByDistrict).forEach(function(item){
+        var district = item[0];
+
+        districtDictionary[district] = parameterCount(item[1])
+           
+      })
+
+      // Converting districtDictionary into an array
+      var districtArr = Object.entries(districtDictionary)
+
+      // Storing district and offense count into an array of arrays
+      var districtCrimeCount = []
+      for(var i=0; i<districtArr.length; i++){
+
+          districtCrimeCount.push([districtArr[i][0], objectIter(districtArr)[i]])
       }
+
+      
+      // // Creating a new GeoJSON dictionary/object that will hold crime count by district
+      districtDataDictionary = districtData.features.map(object => object.properties)
+      
+
+      // // Adding the crime count by district onto the GeoJSON dictionary/object
+      for(var i=0; i< (districtCrimeCount.length -1); i++){
+        districtDataDictionary[i]["Crime__Count"] = districtCrimeCount[i][1]
+      }
+      
+      // Creating a GeoJSON layer with the retrieved data
+      var district = L.choropleth(districtData, {
+        
+        // Defining what propety in the features to use
+        valueProperty: "Crime__Count",
+    
+        // Setting the color Scale
+        scale: ["#ffffb2", "#b10026"],
+    
+        // Number of breaks in step range
+        steps: 10,
+    
+        // q for quartile, e for equidistant, k for k-means this case we are using quartile
+        mode: "q",
+    
+        // Adding style
+        style: {
+          // Border color
+          color: "#ffffb2",
+          weight: 1,
+          fillOpacity: 0.8
+        },
+    
+        // Bindind a pop-up to each layer
+        onEachFeature: function(feature, layer){
+          layer.bindPopup(`District: ${feature.properties.DISTRICT} <hr> Crime Count: ${feature.properties.Crime__Count}`)
+          }
+        })
+
+      var baseMaps = {
+        "Green": runBikeHike,
+        "light": light
+      } 
+
+      var overlayMaps = {
+        "Beats": geojson,
+        "Districts": district
+      }
+
+      // Creating the map object
+      var myMap2 = L.map("map", {
+        center: [38.5816, -121.4944],
+        zoom: 10,
+        layers: [runBikeHike, district]
+      });
+      
+      L.control.layers(baseMaps, overlayMaps, {
+        collapsed: false
       }).addTo(myMap2)
 
+// ------------------------------------------------------------------------------------------ //
       // Creating legend
       var legend = L.control({position: "bottomright"});
         
@@ -107,7 +210,7 @@ d3.json(link, function(data) {
         var labels = []
 
         // Add min & max
-        var legendInfo = "<h1>Crime Count</h1>"+
+        var legendInfo = "<h1>Crime Count</h1><i style=margin-left:70px>Data from Jan 2020 to today</i>"+
         "<div class=\"labels\">"+
           "<div class=\"min\">" + limits[0] + "</div>" +
           "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
@@ -128,4 +231,5 @@ d3.json(link, function(data) {
       legend.addTo(myMap2)
     })
 
+  })
 });

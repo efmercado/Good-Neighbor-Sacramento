@@ -263,7 +263,7 @@ function crimeBarChart(crimes){
         .attr("y", d => yScale(d[1]))
         .attr("height", d => chartHeight - yScale(d[1]))
         .attr("width", xScale.bandwidth())
-        .attr("fill", "black")
+        .attr("fill", "grey")
 
     // Create "mouseover/mouseout" event listeners to display/hide tooltip and transitions
     barsGroup.on("mouseover", function(d) {
@@ -277,7 +277,7 @@ function crimeBarChart(crimes){
             d3.select(this)
                 .transition()
                 .duration(200)
-                .attr("fill", "black")
+                .attr("fill", "grey")
             toolTip.hide(d, this)
         })
 }
