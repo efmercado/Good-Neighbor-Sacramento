@@ -64,7 +64,7 @@ d3.json(crime, function(crimeData){
     var x = d3.scaleBand()
         .domain(myGroups)
         .range([0, chartWidth])
-        .padding(0.01);
+        .padding(0.08);
 
     heatGroup.append("g")
         .call(d3.axisBottom(x))
@@ -77,18 +77,29 @@ d3.json(crime, function(crimeData){
     var y = d3.scaleBand()
         .domain(myVars)
         .range([chartHeight, 0])
-        .padding(0.01);
+        .padding(0.08);
 
     heatGroup.append("g")
         .call(d3.axisLeft(y))
 
     // Building the color scale
     var myColor = d3.scaleLinear()
-        .domain([1,100])
-        .range(["white", "#0daf89"])
+        .domain([1,40])
+        .range(["white", "#CC0000"])
 
+    // Initializing toolTip
+    var toolTip = d3.tip()
+        .attr("class", "tooltip")
+        .offset([-20, 0])
+        .html(function(d) {
+            return `Day: ${d[0]} <br> Time: ${d[1]} <br> Count: ${d[2]}`
+        })
+
+    // Creating the tooltil in heatGroup
+    heatGroup.call(toolTip)
+    
     // Appending the heatmap
-    heatGroup.selectAll(".heat")
+    var rectGroup = heatGroup.selectAll(".heat")
         .data(crimeCountArr)
         .enter()
         .append("rect")
@@ -97,7 +108,23 @@ d3.json(crime, function(crimeData){
         .attr("y", d => y(d[0]))
         .attr("width", x.bandwidth() )
         .attr("height", y.bandwidth() )
-        .style("fill", function(d) { return myColor(d[2])} )
+        .attr("fill", function(d) { return myColor(d[2])} )
+
+    rectGroup.on("mouseover", function(d) {
+        d3.select(this)
+            .transition()
+            .duration(600)
+            .attr("fill", "#CC0000")
+        toolTip.show(d, this)
+    })
+
+    rectGroup.on("mouseout", function(d) {
+        d3.select(this)
+          .transition()
+          .duration(600)
+          .attr("fill", function(d) { return myColor(d[2])} )
+        toolTip.hide(d, this)
+    })
 
 });
 

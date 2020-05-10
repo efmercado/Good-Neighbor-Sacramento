@@ -153,7 +153,49 @@ function crimeLineGraph(crimeObject){
     // Appending the line onto the graph
     lineGroup.append("path")
         .attr("d", drawLine(crimeCountArr))
-        .classed("line blue", true)
+        .classed("line dark-red", true)
+
+    // Initializing Tooltip
+    var toolTip = d3.tip()
+        .attr("class", "tooltip")
+        .offset([-10, 0])
+        .html(function(d) {
+            return `Date: ${d[0]} <br> Number of Cases: ${d[1]}`
+    })
+
+    // Creating the tooltip in chartGroup
+    chartGroup.call(toolTip);
+
+    // Appending circles to data points
+    var circlesGroup = lineGroup.selectAll("circle")
+        .data(crimeCountArr)
+        .enter()
+        .append("circle")
+        .attr("cx", d => xTimeScale(parseTime(d[0])))
+        .attr("cy", d => yLinearScale(d[1]))
+        .attr("r", "8")
+        .attr("fill", "gold")
+        .attr("stroke-width", "1")
+        .attr("stroke", "black")
+
+    // Adding event listeners with transitions
+    circlesGroup.on("mouseover", function(d) {
+        d3.select(this)
+          .transition()
+          .duration(600)
+          .attr("r", "14")
+          .attr("fill", "red")
+        toolTip.show(d, this)
+    })
+        .on("mouseout", function(d) {
+            d3.select(this)
+              .transition()
+              .duration(600)
+              .attr("r", "8")
+              .attr("fill", "gold")
+            toolTip.hide(d, this)
+        })
+
 }
 
 function crimeBarChart(crimes){
@@ -202,12 +244,40 @@ function crimeBarChart(crimes){
         .attr("x", 8)
         .attr("dy", ".35em")
 
+    // Initializing toolTip
+    var toolTip = d3.tip()
+        .attr("class", "tooltip")
+        .offset([-10, 0])
+        .html(function(d) {
+            return `Offense: ${d[0]} <br> Count: ${d[1]}`
+        })
+ 
+    // Creating the tooltip in chartGroup
+    chartGroup.call(toolTip);
+
     // Appending the rectancles to the graph
-    chartGroup.selectAll(".bar")
+    var barsGroup = chartGroup.selectAll(".bar")
         .data(sortableCrimeArray).enter()
         .append("rect").classed("bar", true)
         .attr("x", d => xScale(d[0]))
         .attr("y", d => yScale(d[1]))
         .attr("height", d => chartHeight - yScale(d[1]))
         .attr("width", xScale.bandwidth())
+        .attr("fill", "black")
+
+    // Create "mouseover/mouseout" event listeners to display/hide tooltip and transitions
+    barsGroup.on("mouseover", function(d) {
+        d3.select(this)
+            .transition()
+            .duration(200)
+            .attr("fill", "#CC0000")
+        toolTip.show(d, this)          
+    })
+        .on("mouseout", function(d) {
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .attr("fill", "black")
+            toolTip.hide(d, this)
+        })
 }

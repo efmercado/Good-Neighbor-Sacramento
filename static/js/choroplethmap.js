@@ -10,10 +10,9 @@ var myMap2 = L.map("map", {
 L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
   attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
   maxZoom: 18,
-  id: "mapbox.streets",
+  id: "mapbox.run-bike-hike",
   accessToken: API_KEY
 }).addTo(myMap2);
-  
   
 // Grabbing the GeoJSON data
 d3.json(link, function(data) {
@@ -108,7 +107,7 @@ d3.json(link, function(data) {
         var labels = []
 
         // Add min & max
-        var legendInfo = "<h6>Crime Count</h6><i>Data from Jan 2020 to today</i>"+
+        var legendInfo = "<h1>Crime Count</h1>"+
         "<div class=\"labels\">"+
           "<div class=\"min\">" + limits[0] + "</div>" +
           "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +

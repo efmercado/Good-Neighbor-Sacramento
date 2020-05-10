@@ -60,8 +60,8 @@ body {
   stroke-width: 2px;
 }
 
-.blue {
-  stroke:blue;
+.dark-red {
+  stroke:#CC0000;
 
 }
 
@@ -105,4 +105,17 @@ body {
 
 h1 {
   text-align: center;
+}
+
+.tooltip {
+  position: absolute;
+  width: 180px;
+  height: 55px;
+  padding: 8px;
+  font: 12px sans-serif;
+  text-align: center;
+  color: white;
+  background: #CC0000;
+  border: 0;
+  border-radius: 10px;
 }
