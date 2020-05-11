@@ -1,4 +1,6 @@
 var crime ="https://services5.arcgis.com/54falWtcpty3V47Z/arcgis/rest/services/general_offenses_year3/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json"
+var crimeData;
+var dataTest;
 
 // Setting up our chart
 var svgWidth = 800;
@@ -14,9 +16,9 @@ var margin = {
 var chartWidth = svgWidth - margin.left - margin.right;
 var chartHeight = svgHeight - margin.top - margin.bottom;
 
-
 // Creating an SVG wrapper, appending the SVG group, and shifting by left and top margins
 var svgBar = d3.select("#bar-graph").append("svg")
+    .classed("svgBar", true)
     .attr("width", svgWidth)
     .attr("height", svgHeight);
 
@@ -24,41 +26,81 @@ var chartGroup = svgBar.append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 var svgLine = d3.select("#line-graph").append("svg")
+    .classed("svgLine", true)
     .attr("width", svgWidth)
     .attr("height", svgHeight);
 
 var lineGroup = svgLine.append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
+var svgHeat = d3.select("#heat-map").append("svg")
+    .classed("svgHeat", true)
+    .attr("width", svgWidth)
+    .attr("height", svgHeight);
+
+var heatGroup = svgHeat.append("g")
+    .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
 // Importing the Sacramento crime data
-d3.json(crime, function(crimeData){
+function init() {
 
-    // Navigating through the json objects to display relevant data features
-    var crimeData = crimeData.features.map(crimeData => crimeData.attributes)
+    d3.selectAll(".svgLine").remove()
+    d3.selectAll(".svgBar").remove()
+    d3.selectAll(".svgHeat").remove()
+
+    // Using the D3 library to read in crime json
+    d3.json(crime, function(data){
+
+        dataTest = data
+
+        // Navigating through the json objects to display relevant data features
+        crimeData = dataTest.features.map(crimeData => crimeData.attributes)
+
+        var districts = crimeData.map(object => object.Police_District)
+        var uniqueDistricts = [...new Set(districts)]
+        uniqueDistricts.unshift("All")
+
+        uniqueDistricts.sort(function(a,b){
+            return a - b
+        })
+        
+        // Parsing date/time string formatted data and converting to a js datetime object
+        crimeData.forEach(function(data){
+            data.Occurence_Date = new Date(data.Occurence_Date)
+        })
+
+        // Calling functions to display initial charts
+        crimeBarChart(crimeData)
+        crimeLineGraph(crimeData)
+        heatMapChart(crimeData)
+
+        // Setting the different options
+        var options = d3.select("#selDataset");
+        uniqueDistricts.forEach(name => options.append("option").text(name))
+
+
+    });
+}
+
+function handleDistrictChange(value) {
+
+    d3.selectAll(".svgLine").remove()
+    d3.selectAll(".svgBar").remove()
+    d3.selectAll(".svgHeat").remove()
     
-    // Parsing date/time string formatted data and converting to a js datetime object
-    crimeData.forEach(function(data){
-        data.Occurence_Date = new Date(data.Occurence_Date)
-    })
+    var filteredDataSet = crimeData.filter(crime => crime.Police_District === value)
 
-    // Creating a list of all offenses
-    var crimes = crimeData.map(object => object.Offense_Category)
-
-    // Calling a custom function to create a bar graph
-    crimeBarChart(crimes)
-
-    // Creating a pseudo callback function to format the js datetime object 
-    const monthName = item => moment(item.Occurence_Date, 'MM/DD/YYYY').format('YYYY-MM-DD');
-    
-    // Grouping crime data by date and creating an array of offenses
-    const crimeByDate = _(crimeData)
-        .groupBy(monthName)
-        .mapValues(items => _.map(items, 'Offense_Category'))
-        .value()
-
-    // Calling a custom function to create a line graph
-    crimeLineGraph(crimeByDate)
-});
+    if(value === "All"){
+        crimeBarChart(crimeData)
+        crimeLineGraph(crimeData)
+        heatMapChart(crimeData)
+    }
+    else{
+    crimeBarChart(filteredDataSet)
+    crimeLineGraph(filteredDataSet)
+    heatMapChart(filteredDataSet)
+    }
+}
 
 // This function will count the number of unique items in an array and store them in a dictionary
 function parameterCount(array){
@@ -107,10 +149,27 @@ function objectIter(arr){
 };
 
 // Function to create a time series line graph
-function crimeLineGraph(crimeObject){
+function crimeLineGraph(crimeData){
+
+    var svgLine = d3.select("#line-graph").append("svg")
+        .classed("svgBar", true)
+        .attr("width", svgWidth)
+        .attr("height", svgHeight);
+
+    var lineGroup = svgLine.append("g")
+        .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+    // Creating a pseudo callback function to format the js datetime object 
+    const monthName = item => moment(item.Occurence_Date, 'MM/DD/YYYY').format('YYYY-MM-DD');
+        
+    // Grouping crime data by date and creating an array of offenses
+    const crimeByDate = _(crimeData)
+        .groupBy(monthName)
+        .mapValues(items => _.map(items, 'Offense_Category'))
+        .value()
 
     // Storing an array of arrays that hold date and offense dictionary
-    var crimeByDateArr = Object.entries(dictionary(Object.entries(crimeObject)));
+    var crimeByDateArr = Object.entries(dictionary(Object.entries(crimeByDate)));
 
     // Creating a new array that exclusively holds date and offense count
     var crimeCountArr = []
@@ -198,7 +257,18 @@ function crimeLineGraph(crimeObject){
 
 }
 
-function crimeBarChart(crimes){
+function crimeBarChart(crimeData){
+
+    var svgBar = d3.select("#bar-graph").append("svg")
+    .classed("svgBar", true)
+    .attr("width", svgWidth)
+    .attr("height", svgHeight);
+
+    var chartGroup = svgBar.append("g")
+    .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+    // Creating a list of all offenses
+    var crimes = crimeData.map(object => object.Offense_Category)
 
     // Storing a new dictionary/object that holds the offense and count
     var crimeObject = parameterCount(crimes);
@@ -281,3 +351,129 @@ function crimeBarChart(crimes){
             toolTip.hide(d, this)
         })
 }
+
+function heatMapChart(crimeData) {
+
+    var svgHeat = d3.select("#heat-map").append("svg")
+        .classed("svgHeat", true)
+        .attr("width", svgWidth)
+        .attr("height", svgHeight);
+
+    var heatGroup = svgHeat.append("g")
+        .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+    // Parsing date/time string formatted data and converting to a js datetime object
+    crimeData.forEach(function(data){
+        data.Occurence_Date = new Date(data.Occurence_Date)
+    })
+
+    // Creating a pseudo callback function to format the js datetime object 
+    const hour = item => moment(item.Occurence_Date).format('hh a')
+
+    // Creating an additional callback function that will also format the js datetime object
+    const timeGroups = (() => {
+        const dayName = (item) => moment(item.Occurence_Date).format('ddd'),
+              hour = (item) => moment(item.Occurence_Date).format('hh a')
+        return {
+            dayName,
+            hour
+        }
+    })();
+
+    // Grouping crime data by day
+    var crimeByDay = _.groupBy(crimeData, timeGroups['dayName'])
+
+    var crimeCountArr = []
+    Object.entries(crimeByDay).forEach(function(object){
+
+        // Grouping crime data by hour
+        var groupedOffensesByTime = _(object[1])
+            .groupBy(hour)
+            .mapValues(items => _.map(items, 'Offense_Category'))
+            .value()
+        
+        // Counting the number of unique items in an array
+        var offenseObjectCount = Object.entries(dictionary(Object.entries(groupedOffensesByTime)))
+        
+        // Parsing in day, time, and count data into a single array
+        for(var i=0; i<offenseObjectCount.length; i++){
+            crimeCountArr.push([object[0], offenseObjectCount[i][0], objectIter(offenseObjectCount)[i]])
+        }
+        return crimeCountArr
+    })
+
+    // Labels for x and y axis
+    var myVars = ["Wed", "Thu", "Fri", "Sat", "Sun", "Mon", "Tue"]
+    var myGroups = ["12 am", "01 am", "02 am", "03 am", "04 am", "05 am", "06 am", "07 am", "08 am", "09 am",
+    "10 am", "11 am", "12 pm", "01 pm", "02 pm", "03 pm", "04 pm", "05 pm", "06 pm", "07 pm", 
+    "08 pm", "09 pm", "10 pm", "11 pm",]
+
+
+    // Building the x scales and axis:
+    var x = d3.scaleBand()
+        .domain(myGroups)
+        .range([0, chartWidth])
+        .padding(0.08);
+
+    heatGroup.append("g")
+        .call(d3.axisBottom(x))
+        .attr("transform", `translate(0, ${chartHeight})`)
+
+    heatGroup.append("g")
+        .call(d3.axisTop(x))
+
+    // Building the y scales and axis:
+    var y = d3.scaleBand()
+        .domain(myVars)
+        .range([chartHeight, 0])
+        .padding(0.08);
+
+    heatGroup.append("g")
+        .call(d3.axisLeft(y))
+
+    // Building the color scale
+    var myColor = d3.scaleLinear()
+        .domain([1,40])
+        .range(["white", "#CC0000"])
+
+    // Initializing toolTip
+    var toolTip = d3.tip()
+        .attr("class", "tooltip")
+        .offset([-20, 0])
+        .html(function(d) {
+            return `Day: ${d[0]} <br> Time: ${d[1]} <br> Count: ${d[2]}`
+        })
+
+    // Creating the tooltil in heatGroup
+    heatGroup.call(toolTip)
+    
+    // Appending the heatmap
+    var rectGroup = heatGroup.selectAll(".heat")
+        .data(crimeCountArr)
+        .enter()
+        .append("rect")
+        .classed("heat", true)
+        .attr("x", d => x(d[1]))
+        .attr("y", d => y(d[0]))
+        .attr("width", x.bandwidth() )
+        .attr("height", y.bandwidth() )
+        .attr("fill", function(d) { return myColor(d[2])} )
+
+    rectGroup.on("mouseover", function(d) {
+        d3.select(this)
+            .transition()
+            .duration(600)
+            .attr("fill", "#CC0000")
+        toolTip.show(d, this)
+    })
+
+    rectGroup.on("mouseout", function(d) {
+        d3.select(this)
+          .transition()
+          .duration(600)
+          .attr("fill", function(d) { return myColor(d[2])} )
+        toolTip.hide(d, this)
+    })
+}
+
+init()
