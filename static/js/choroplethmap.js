@@ -1,3 +1,4 @@
+
 var link = "static/data/police_beats.geojson"
 var districts = "static/data/police_districts.geojson"
 
@@ -173,9 +174,15 @@ d3.json(link, function(data) {
         },
     
         // Bindind a pop-up to each layer
-        onEachFeature: function(feature, layer){
-          layer.bindPopup(`District: ${feature.properties.DISTRICT} <hr> Crime Count: ${feature.properties.Crime__Count}`)
+        onEachFeature: function(feature, layer)
+          {
+            // layer.bindPopup(`District: ${feature.properties.DISTRICT} <hr> Crime Count: ${feature.properties.Crime__Count}`);
+            layer.on({
+              click: whenClicked
+              });
+            
           }
+
         })
 
       var baseMaps = {

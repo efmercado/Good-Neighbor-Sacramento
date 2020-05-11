@@ -2,7 +2,6 @@ $("#D1").animatedModal({
     animatedIn:'zoomIn',
     animatedOut:'bounceOut',
     color:'white',
-    overflow: 'hidden',
     // Callbacks
     beforeOpen: function() {
         console.log("The animation was called");

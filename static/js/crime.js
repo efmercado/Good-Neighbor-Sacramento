@@ -88,7 +88,7 @@ function handleDistrictChange(value) {
     d3.selectAll(".svgBar").remove()
     d3.selectAll(".svgHeat").remove()
     
-    var filteredDataSet = crimeData.filter(crime => crime.Police_District === value)
+    var filteredDataSet = crimeData.filter(crime => crime.Police_District == value)
 
     if(value === "All"){
         crimeBarChart(crimeData)
@@ -101,6 +101,19 @@ function handleDistrictChange(value) {
     heatMapChart(filteredDataSet)
     }
 }
+
+function whenClicked(e) {
+    // e = event
+    console.log(e.target.feature.properties.DISTRICT);
+    var district = e.target.feature.properties.DISTRICT;
+    console.log(district);
+    handleDistrictChange(district);
+
+    document.getElementById("D1").click();
+
+    // You can make your ajax call declaration here
+    //$.ajax(... 
+  }
 
 // This function will count the number of unique items in an array and store them in a dictionary
 function parameterCount(array){
