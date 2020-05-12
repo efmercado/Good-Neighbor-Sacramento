@@ -109,6 +109,8 @@ function whenClicked(e) {
     console.log(district);
     handleDistrictChange(district);
 
+    modalContentChange(district);
+
     document.getElementById("D1").click();
 
     // You can make your ajax call declaration here

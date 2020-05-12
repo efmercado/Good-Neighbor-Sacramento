@@ -92,77 +92,14 @@
                 <footer class="blockquote-footer">your good neighbor ;)</cite></footer>
               </blockquote>
                          
-            <div id="animatedModal">
+            <div id="animatedModal" style="position: absolute; z-index: -1 !important;">
                 <!--THIS IS IMPORTANT! to close the modal, the class name has to match the name given on the ID  class="close-animatedModal" -->
                 <div class="close-animatedModal" style="padding: 20px;"> 
                     <i class="far fa-times-circle fa-2x"></i>
                 </div>
-                <div class="modal-content" style="border: 0px;">
+                <div class="modal-content" style="border: 0px; position: absolute; z-index: -1 !important">
 
-                    <div class="row" style="border: 0px; display:none;">
-                        <div class="col-md-4">
-                            <h4>North Natomas</h4>
-                            <img src="https://i.redd.it/gjyo3ojtglkz.jpg" class="img-thumbnail"  alt="...">
-                        </div>
-                        <div class="col-md-4">
-                            <img src="https://i.redd.it/gjyo3ojtglkz.jpg" class="img-thumbnail"  alt="...">
-                        </div>
-                        <div class="col-md-4">
-                            <img src="https://i.redd.it/gjyo3ojtglkz.jpg" class="img-thumbnail"  alt="...">
-                        </div>
-                    </div>
-
-                    <div class="row" style="border: 0px; display:none;">
-                        <div class="col-md-4">
-                            <h1 class="display-4">North Natomas</h1>
-                            <img src="https://i.redd.it/gjyo3ojtglkz.jpg" class="img-thumbnail"  alt="...">
-                        </div>
-                        <div class="col-md-4">
-                            <img src="https://i.redd.it/gjyo3ojtglkz.jpg" class="img-thumbnail"  alt="...">
-                        </div>
-                        <div class="col-md-4">
-                            <img src="https://i.redd.it/gjyo3ojtglkz.jpg" class="img-thumbnail"  alt="...">
-                        </div>
-                    </div>
-
-                    <div class="row" style="border: 0px; display:none;">
-                        <div class="col-md-4">
-                            <h4>North Natomas</h4>
-                            <img src="https://i.redd.it/gjyo3ojtglkz.jpg" class="img-thumbnail"  alt="...">
-                        </div>
-                        <div class="col-md-4">
-                            <img src="https://i.redd.it/gjyo3ojtglkz.jpg" class="img-thumbnail"  alt="...">
-                        </div>
-                        <div class="col-md-4">
-                            <img src="https://i.redd.it/gjyo3ojtglkz.jpg" class="img-thumbnail"  alt="...">
-                        </div>
-                    </div>
-
-                    <div class="row" style="border: 0px; display:none;">
-                        <div class="col-md-4">
-                            <h1 class="display-4">North Natomas</h1>
-                            <img src="https://i.redd.it/gjyo3ojtglkz.jpg" class="img-thumbnail"  alt="...">
-                        </div>
-                        <div class="col-md-4">
-                            <img src="https://i.redd.it/gjyo3ojtglkz.jpg" class="img-thumbnail"  alt="...">
-                        </div>
-                        <div class="col-md-4">
-                            <img src="https://i.redd.it/gjyo3ojtglkz.jpg" class="img-thumbnail"  alt="...">
-                        </div>
-                    </div>
-
-                    <div class="row" style="border: 0px; display:none;">
-                        <div class="col-md-4">
-                            <h1 class="display-4">North Natomas</h1>
-                            <img src="https://i.redd.it/gjyo3ojtglkz.jpg" class="img-thumbnail"  alt="...">
-                        </div>
-                        <div class="col-md-4">
-                            <img src="https://i.redd.it/gjyo3ojtglkz.jpg" class="img-thumbnail"  alt="...">
-                        </div>
-                        <div class="col-md-4">
-                            <img src="https://i.redd.it/gjyo3ojtglkz.jpg" class="img-thumbnail"  alt="...">
-                        </div>
-                    </div>
+                    
 
                     <div class="row" style="border: 0px;">
                         
@@ -187,31 +124,9 @@
 
                         <div id="district1" class="col-md-3" style="border: 0px;">
                             
-                            <div class="col-md-12">
-                                <h4>Neighborhoods Safety Ranking</h4>
+                            <div class="col-md-12" id="safetyranking">
+                                <h3>Neighborhood Safety Ranking</h3>
                                 <br>
-
-                                <h6>#1 Beat A: North Natomas</h6>
-                                <img src="https://i.redd.it/gjyo3ojtglkz.jpg" class="img-thumbnail"  alt="...">
-                                <h6>Analysis: Safe</h6>
-                                <h6>79 % less crime</h6>
-
-                                <br>
-
-                                <h6>#1 Beat A: North Natomas</h6>
-                                <img src="https://i.redd.it/gjyo3ojtglkz.jpg" class="img-thumbnail"  alt="...">
-                                <h6>Analysis: Safe</h6>
-                                <h6>79 % less crime</h6>
-
-                                <br>
-
-                                <h6>#1 Beat A: North Natomas</h6>
-                                <img src="https://i.redd.it/gjyo3ojtglkz.jpg" class="img-thumbnail"  alt="...">
-                                <h6>Analysis: Safe</h6>
-                                <h6>79 % less crime</h6>
-
-                                <br>
-
                             </div>
 
                             
@@ -267,7 +182,7 @@
                 </svg> -->
 
                 <a id="D1" href="#animatedModal" style="display:none">DEMO01</a>
-    
+                <p>Hello, <span id="username"></span></p>
                 
     
             </div>
@@ -308,6 +223,13 @@
 <script src="../static/js/animatedModal.js-master/animatedModal.min.js"></script>
 
 <script src="../static/js/beats.js"></script>
+<script src="../static/js/modalContent.js"></script>
+
+<script>
+    var user = JSON.parse('{{ user | tojson | safe}}');
+    document.getElementById('username').innerHTML = user.firstname + " " +
+            user.lastname;
+</script>
 
 
 
