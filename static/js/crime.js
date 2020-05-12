@@ -227,6 +227,21 @@ function crimeLineGraph(crimeData){
         .attr("d", drawLine(crimeCountArr))
         .classed("line dark-red", true)
 
+     // Creating axes labels
+     lineGroup.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x", 0 - (chartHeight*.6))
+        .attr("dy", "1em")
+        .attr("class", "axisText")
+        .text("Crime Count")
+
+    lineGroup.append("text")
+        .attr("transform", `translate(${chartWidth*0.5}, ${chartHeight + 45})`)
+        .attr("class", "axisText")
+        .attr("anchor-text", "middle")
+        .text("Date")
+
     // Initializing Tooltip
     var toolTip = d3.tip()
         .attr("class", "tooltip")
@@ -326,6 +341,21 @@ function crimeBarChart(crimeData){
         .attr("y", 0)
         .attr("x", 8)
         .attr("dy", ".35em")
+
+    // Creating axes labels
+    chartGroup.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x", 0 - (chartHeight*.6))
+        .attr("dy", "1em")
+        .attr("class", "axisText")
+        .text("Crime Count")
+
+    chartGroup.append("text")
+        .attr("transform", `translate(${chartWidth*0.45}, ${chartHeight + 100})`)
+        .attr("class", "axisText")
+        .attr("anchor-text", "middle")
+        .text("Offense Category")
 
     // Initializing toolTip
     var toolTip = d3.tip()
@@ -448,6 +478,21 @@ function heatMapChart(crimeData) {
     var myColor = d3.scaleLinear()
         .domain([1,40])
         .range(["white", "#CC0000"])
+
+    // Creating axes labels
+    heatGroup.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x", 0 - (chartHeight*.6))
+        .attr("dy", "1em")
+        .attr("class", "axisText")
+        .text("Day of the Week")
+ 
+    heatGroup.append("text")
+        .attr("transform", `translate(${chartWidth*0.5}, ${chartHeight + 45})`)
+        .attr("class", "axisText")
+        .attr("anchor-text", "middle")
+        .text("Time")
 
     // Initializing toolTip
     var toolTip = d3.tip()
