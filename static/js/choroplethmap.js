@@ -187,7 +187,7 @@ d3.json(link, function(data) {
 
       var baseMaps = {
         "Green": runBikeHike,
-        "light": light
+        "Light": light
       } 
 
       var overlayMaps = {
@@ -217,7 +217,7 @@ d3.json(link, function(data) {
         var labels = []
 
         // Add min & max
-        var legendInfo = "<h1>Crime Count</h1><i style=margin-left:70px>Data from Jan 2020 to today</i>"+
+        var legendInfo = "<center>Crime count from Jan 2020 to today</center>"+
         "<div class=\"labels\">"+
           "<div class=\"min\">" + limits[0] + "</div>" +
           "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
