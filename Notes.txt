@@ -1,0 +1,24 @@
+ZIP Codes: <list>
+
+Safety:
+Good-Bad area
+Safe-low crime-high crime
+
+Real Estate Info:
+
+Median listing price sac: 
+Median listing price US: 
+
+Avg days on the market:
+
+Hotness Score:
+
+-------------------------
+Edgar's charts that are filtered
+
+
+<ul style="list-style: none;">
+    {% for record in record %}
+       <li>{{ record.postal_code }}: {{ record.postal_code }}</li>
+    {% endfor %}
+</ul>
