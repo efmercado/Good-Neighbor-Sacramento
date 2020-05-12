@@ -176,7 +176,7 @@ d3.json(link, function(data) {
         // Bindind a pop-up to each layer
         onEachFeature: function(feature, layer)
           {
-            // layer.bindPopup(`District: ${feature.properties.DISTRICT} <hr> Crime Count: ${feature.properties.Crime__Count}`);
+            layer.bindPopup(`District: ${feature.properties.DISTRICT} <hr> Crime Count: ${feature.properties.Crime__Count}`);
             layer.on({
               click: whenClicked
               });
