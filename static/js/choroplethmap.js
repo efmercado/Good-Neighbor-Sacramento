@@ -1,6 +1,6 @@
 
-var link = "static/data/police_beats.geojson"
-var districts = "static/data/police_districts.geojson"
+var link = "../static/data/police_beats.geojson"
+var districts = "../static/data/police_districts.geojson"
 
 var beatCrimeCount2 = [];
 
