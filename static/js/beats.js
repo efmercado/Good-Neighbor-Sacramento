@@ -16,3 +16,7 @@ $("#D1").animatedModal({
         console.log("The animation is completed");
     }
 });
+
+d3.json("/districts_beats", function(data) {
+    console.log(data);
+});
