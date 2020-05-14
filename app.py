@@ -29,18 +29,39 @@ df = pd.read_csv("./static/data/rdc_realestate_historial_data.csv")
 data_json = json.loads(df.to_json(orient='records'))
 db.realestate.insert_many(data_json)
 
+# Drops collection if available to remove duplicates
+db.districts.drop()
+
+df = pd.read_csv("districts_beats.csv")
+data_json= json.loads(df.to_json(orient='records'))
+db.districts.insert_many(data_json)
+
+
+
+
 db.realestate.find()
 
+<<<<<<< HEAD
 # @app.route('/', methods=['GET','POST']) 
+=======
+
+
+
+
+>>>>>>> da3381f453b6d7a217a2d8e616ee704c406f9cda
 # Set route
 @app.route('/')
 def index():
 
     record = list(db.realestate.find())
+    district = list(db.districts.find())
+
+    
+
     user = {'firstname': "Mr.", 'lastname': "My Father's Son"}
 
     # Return the template with the teams list passed in
-    return render_template('index.html', record=record, user=user)
+    return render_template('index.html', record=record, user=user, district=district)
 
 
 if __name__ == "__main__":

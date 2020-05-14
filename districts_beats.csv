@@ -1,0 +1,20 @@
+﻿district,district_name,beat,neighborhood
+1,Northwest,A,North Natomas
+1,Northwest,B,South Natomas
+1,Northwest,C,Northgate
+2,Northeast,A,Robla/Del Paso Heights
+2,Northeast,B,Hagginwood
+2,Northeast,C,Arden/Old North Sac
+3,Central,A,Downtown
+3,Central,B,Midtown
+4,Southwest,A,Land Park
+4,Southwest,B,Sac Executive
+4,Southwest,C,Pocket
+5,South,A,Meadowview
+5,South,B,Parkway
+5,South,C,Valley Hi/North Laguna
+6,East,A,Oak Park
+6,East,B,Tahoe Park/Tallac Village
+6,East,C,South East/Glen Elder/Fruitridge
+6,East,D,Fab 40's
+6,East,E,College Town

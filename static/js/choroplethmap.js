@@ -93,7 +93,6 @@ d3.json(link, function(data) {
     beatCrimeCount2.sort(function(a, b) {
       return a[1] - b[1];
     });
-    beatCrimeCount2.reverse();
 
     console.log(beatCrimeCount2);
 
