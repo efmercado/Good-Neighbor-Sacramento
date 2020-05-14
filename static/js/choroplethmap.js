@@ -2,6 +2,8 @@
 var link = "static/data/police_beats.geojson"
 var districts = "static/data/police_districts.geojson"
 
+var beatCrimeCount2 = [];
+
 // Creating the map object
 // var myMap2 = L.map("map", {
 //   center: [38.5816, -121.4944],
@@ -23,7 +25,9 @@ var light = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}
   tileSize: 512,
   zoomOffset: -1,
   accessToken: API_KEY
-})
+});
+
+var beatsCrime = {};
 
 // ---------------------------------------------------------------------------------------- //
 
@@ -50,6 +54,8 @@ d3.json(link, function(data) {
         beatDictionary[beat] = parameterCount(item[1])
            
     })
+
+    //console.log(beatDictionary);
     
     // Converting beatDictionary into an array
     var beatArr = Object.entries(beatDictionary)
@@ -60,7 +66,11 @@ d3.json(link, function(data) {
 
         beatCrimeCount.push([beatArr[i][0], objectIter(beatArr)[i]])
     }
-    
+
+    console.log(beatCrimeCount);
+   
+    //console.log(arr);
+
     // First sorting beatCrimeCount by letter
     beatCrimeCount.sort(function(a,b){
       
@@ -74,6 +84,22 @@ d3.json(link, function(data) {
     beatCrimeCount.sort(function(a,b) {
         return a[0][0] - b[0][0];
     });
+
+    //Joy's Code
+
+    
+    beatCrimeCount2 = beatCrimeCount;
+
+    beatCrimeCount2.sort(function(a, b) {
+      return a[1] - b[1];
+    });
+    beatCrimeCount2.reverse();
+
+    console.log(beatCrimeCount2);
+
+    
+
+    //End: Joy's code
 
     // Creating a new GeoJSON dictionary/object that will hold crime count by beat
     dataDictionary = data.features.map(object => object.properties)
@@ -176,7 +202,7 @@ d3.json(link, function(data) {
         // Bindind a pop-up to each layer
         onEachFeature: function(feature, layer)
           {
-            layer.bindPopup(`District: ${feature.properties.DISTRICT} <hr> Crime Count: ${feature.properties.Crime__Count}`);
+            // layer.bindPopup(`District: ${feature.properties.DISTRICT} <hr> Crime Count: ${feature.properties.Crime__Count}`);
             layer.on({
               click: whenClicked
               });

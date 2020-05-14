@@ -37,9 +37,10 @@ db.realestate.find()
 def index():
 
     record = list(db.realestate.find())
+    user = {'firstname': "Mr.", 'lastname': "My Father's Son"}
 
     # Return the template with the teams list passed in
-    return render_template('index.html', record=record)
+    return render_template('index.html', record=record, user=user)
 
 
 if __name__ == "__main__":
