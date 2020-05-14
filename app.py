@@ -31,7 +31,7 @@ db.realestate.insert_many(data_json)
 
 db.realestate.find()
 
-
+# @app.route('/', methods=['GET','POST']) 
 # Set route
 @app.route('/')
 def index():

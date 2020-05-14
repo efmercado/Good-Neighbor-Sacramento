@@ -104,7 +104,7 @@ function handleDistrictChange(value) {
 
 function whenClicked(e) {
     // e = event
-    console.log(e.target.feature.properties.DISTRICT);
+    console.log(e);
     var district = e.target.feature.properties.DISTRICT;
     console.log(district);
     handleDistrictChange(district);
