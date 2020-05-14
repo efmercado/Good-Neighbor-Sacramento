@@ -105,8 +105,7 @@
                         
                         
 
-                        <div class="col-md-7" style="border: 0px;">
-                            <br>
+                        <div class="col-md-6" style="border: 0px;">
                             <h3>District One: Northwest - Overview</h3>
 
                             <div id="bar-graph">
@@ -122,7 +121,7 @@
                             </div>
                         </div>
 
-                        <div id="district1" class="col-md-3" style="border: 0px;">
+                        <div id="district1" class="col-md-4" style="border: 0px;">
                             
                             <div class="col-md-12" id="safetyranking">
                                 <h3>Neighborhood Safety Ranking</h3>
@@ -170,19 +169,15 @@
     <div class="row"></div>
         <div class="col-md-12">
             <div id="districts" style="text-align:center">
-            
-                <!-- <svg id="D1" width="250" height="250" href="#animatedModal" class="districts">
-                    <circle cx="125" cy="125" r="70" fill="#aeaeae" />
-                    <text x="50%" y="40%" text-anchor="middle" fill="white" font-size="15px" dy=".5em">
-                        District 1 
-                    </text>
-                    <text x="50%" y="50%" text-anchor="middle" fill="white" font-size="30px" font-family="sweetpurple" dy=".3em">
-                        Northwest 
-                    </text>
-                </svg> -->
 
                 <a id="D1" href="#animatedModal" style="display:none">DEMO01</a>
                 <p>Hello, <span id="username"></span></p>
+
+                <ul style="list-style: none;">
+                    {% for district in district %}
+                       <li>{{ district.beat }}: {{ district.beat }}</li>
+                    {% endfor %}
+                </ul>
                 
     
             </div>
@@ -192,13 +187,6 @@
 
 </div>
 
-<!-- <div class="container">
-   
-    <div class="card card-body bg-light mb-3">
-        <h5>District</h5>
-        <select id="selDataset" onchange="handleDistrictChange(this.value)"></select>
-    </div>
-</div> -->
 
 
 
@@ -229,6 +217,7 @@
     var user = JSON.parse('{{ user | tojson | safe}}');
     document.getElementById('username').innerHTML = user.firstname + " " +
             user.lastname;
+
 </script>
 
 
