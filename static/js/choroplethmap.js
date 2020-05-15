@@ -120,6 +120,18 @@ d3.json(link, function(data) {
     dataDictionary = data.features.map(object => object.properties)
     console.log("geoJson", data)
     console.log("dataDictionary", dataDictionary)
+        // Sorting the geoJson data
+    // var data = data.features.map(property => property.properties)
+
+    // console.log("daataaa", data)
+    // data.sort(function(a,b){
+      
+    //   if(a.BEAT[0][1] < b.BEAT[0][1]) { return -1; }
+    //   if(a.BEAT[0][1] > b.BEAT[0][1]) { return 1; }
+
+    //     return 0;
+    // });
+
     
     // Adding the crime count by beat onto the GeoJSON dictionary/object
     beatCrimeCount.forEach((item, i) => dataDictionary[i]["Crime__Count"] = item[1])
