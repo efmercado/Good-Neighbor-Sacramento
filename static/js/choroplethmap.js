@@ -75,6 +75,8 @@ d3.json(link, function(data) {
         beatCrimeCount.push([beatArr[i][0], objectIter(beatArr)[i]])
     }
     console.log("beatCrimeCount", beatCrimeCount)
+
+    //console.log(beatCrimeCount);
    
     //console.log(arr);
 
@@ -103,6 +105,7 @@ d3.json(link, function(data) {
     });
 
     console.log("2", beatCrimeCount2);
+    //console.log(beatCrimeCount2);
 
     
 

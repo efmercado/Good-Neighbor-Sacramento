@@ -106,7 +106,10 @@
                         
 
                         <div class="col-md-6" style="border: 0px;">
-                            <h3>District One: Northwest - Overview</h3>
+
+                            <div id="overview-title">
+                                <!-- <h3>District One: Northwest - Overview</h3> -->
+                            </div>
 
                             <div id="bar-graph">
                             </div>
@@ -136,7 +139,18 @@
                             
                             
                                 <h4>Real Estate Values</h4>
-                                <h5>ZIP Codes:</h5>
+                                <h5>Area ZIP Codes:</h5>
+                                <p id="zipcodes"></p>
+
+                                <br><br>
+
+                                <h5>Median listing price of homes:</h5>
+                                <h1 id="listingprice"></h1>
+
+                                <br><br>
+
+                                <h5>Avg days in the market:</h5>
+                                <h1 id="daysinmarket"></h1>
                                 
 
                             
@@ -171,12 +185,16 @@
             <div id="districts" style="text-align:center">
 
                 <a id="D1" href="#animatedModal" style="display:none">DEMO01</a>
-                <p>Hello, <span id="username"></span></p>
+                <!-- <p>Hello, <span id="username"></span></p> -->
 
                 <ul style="list-style: none;">
-                    {% for district in district %}
+                    <!-- {% for district in district %}
                        <li>{{ district.beat }}: {{ district.beat }}</li>
                     {% endfor %}
+
+                    {% for record in record %}
+                       <li>{{ record.postal_code }}: {{ record.postal_code }}</li>
+                    {% endfor %} -->
                 </ul>
                 <ul style="list-style: none;">
                     {% for district in district %}
@@ -218,17 +236,10 @@
 <script src="../static/js/beats.js"></script>
 <script src="../static/js/modalContent.js"></script>
 
-<script>
-    var user = JSON.parse('{{ user | tojson | safe}}');
-    document.getElementById('username').innerHTML = user.firstname + " " +
-            user.lastname;
 
-</script>
 
 
 
 </body>
-
-
 
 </html>
