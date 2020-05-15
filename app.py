@@ -36,17 +36,7 @@ df = pd.read_csv("districts_beats.csv")
 data_json= json.loads(df.to_json(orient='records'))
 db.districts.insert_many(data_json)
 
-
-
-
 db.realestate.find()
-
-<<<<<<< HEAD
-# @app.route('/', methods=['GET','POST']) 
-=======
-
-
-
 
 # Set route
 @app.route('/')

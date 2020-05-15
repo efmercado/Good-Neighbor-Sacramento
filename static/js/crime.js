@@ -1,4 +1,4 @@
-var crime ="https://services5.arcgis.com/54falWtcpty3V47Z/arcgis/rest/services/general_offenses_year3/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json"
+var crime ="https://services5.arcgis.com/54falWtcpty3V47Z/arcgis/rest/services/general_offenses_year3/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&resultType=standard&f=json"
 var crimeData;
 var dataTest;
 
@@ -55,6 +55,7 @@ function init() {
 
         // Navigating through the json objects to display relevant data features
         crimeData = dataTest.features.map(crimeData => crimeData.attributes)
+        console.log(crimeData)
 
         var districts = crimeData.map(object => object.Police_District)
         var uniqueDistricts = [...new Set(districts)]
@@ -481,6 +482,14 @@ function heatMapChart(crimeData) {
         .domain([1,40])
         .range(["white", "#CC0000"])
 
+    // Creating title
+    // heatGroup.append("text")
+    //     .attr("transform", `translate(${chartWidth * 0.5}, 200`)
+    //     .attr("y", 0 + margin.left)
+    //     .attr("x", )
+    //     .text("Heatmap of Crime Occurences throughout the Day and Time")
+
+    
     // Creating axes labels
     heatGroup.append("text")
         .attr("transform", "rotate(-90)")
