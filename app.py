@@ -48,7 +48,6 @@ db.realestate.find()
 
 
 
->>>>>>> da3381f453b6d7a217a2d8e616ee704c406f9cda
 # Set route
 @app.route('/')
 def index():
