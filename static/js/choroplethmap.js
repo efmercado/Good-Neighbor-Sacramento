@@ -13,14 +13,16 @@ var beatCrimeCount2 = [];
   // Adding the tile layer
 var runBikeHike = L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
   attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-  maxZoom: 18,
+  maxZoom: 10,
+  minZoom: 10,
   id: "mapbox.run-bike-hike",
   accessToken: API_KEY
 });
 
 var light = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
   attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-  maxZoom: 18,
+  maxZoom: 10,
+  minZoom: 10,
   id: 'mapbox/light-v10',
   tileSize: 512,
   zoomOffset: -1,
@@ -254,8 +256,10 @@ d3.json(link, function(data) {
       var myMap2 = L.map("map", {
         center: [38.5816, -121.4944],
         zoom: 10,
-        layers: [runBikeHike, district]
+        layers: [runBikeHike, district],
+        zoomControl: false
       });
+
       
       L.control.layers(baseMaps, overlayMaps, {
         collapsed: false
