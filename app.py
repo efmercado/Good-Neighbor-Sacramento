@@ -40,8 +40,6 @@ df = pd.read_csv("./static/data/sacramento_neighborhoods.csv")
 data_json = json.loads(df.to_json(orient='records'))
 db.districts_zip.insert_many(data_json)
 
-
-
 # Set route
 @app.route('/')
 def index():
