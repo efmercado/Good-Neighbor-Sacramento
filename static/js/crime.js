@@ -7,7 +7,7 @@ var svgWidth = 800;
 var svgHeight = 500;
 
 var margin = {
-    top: 20,
+    top: 40,
     bottom: 120,
     left: 60,
     right: 40
@@ -55,7 +55,6 @@ function init() {
 
         // Navigating through the json objects to display relevant data features
         crimeData = dataTest.features.map(crimeData => crimeData.attributes)
-        console.log(crimeData)
 
         var districts = crimeData.map(object => object.Police_District)
         var uniqueDistricts = [...new Set(districts)]
@@ -105,9 +104,8 @@ function handleDistrictChange(value) {
 
 function whenClicked(e) {
     // e = event
-    console.log(e);
     var district = e.target.feature.properties.DISTRICT;
-    console.log(district);
+
     handleDistrictChange(district);
 
     modalContentChange(district);
@@ -168,7 +166,7 @@ function objectIter(arr){
 function crimeLineGraph(crimeData){
 
     var svgLine = d3.select("#line-graph").append("svg")
-        .classed("svgBar", true)
+        .classed("svgLine", true)
         .attr("width", svgWidth)
         .attr("height", svgHeight);
 
@@ -184,6 +182,8 @@ function crimeLineGraph(crimeData){
         .mapValues(items => _.map(items, 'Offense_Category'))
         .value()
 
+    console.log("line", crimeByDate)
+
     // Storing an array of arrays that hold date and offense dictionary
     var crimeByDateArr = Object.entries(dictionary(Object.entries(crimeByDate)));
 
@@ -195,7 +195,7 @@ function crimeLineGraph(crimeData){
     }
 
     // Using d3 to create a callback function that will parse and convert a string back to a date
-    var parseTime = d3.timeParse("%Y-%e-%d");
+    var parseTime = d3.timeParse("%Y-%m-%d");
 
     // Creating a x-axis time scale callback function
     var xTimeScale = d3.scaleTime()
@@ -206,6 +206,8 @@ function crimeLineGraph(crimeData){
     var yLinearScale = d3.scaleLinear()
         .domain([0, d3.max(objectIter(crimeByDateArr))])
         .range([chartHeight, 0])
+
+    console.log("max?", d3.max(objectIter(crimeByDateArr)))
 
     // Additional callback functions for x and y axis
     var bottomAxis = d3.axisBottom(xTimeScale).tickFormat(d3.timeFormat("%b-%d"))
@@ -229,6 +231,13 @@ function crimeLineGraph(crimeData){
     lineGroup.append("path")
         .attr("d", drawLine(crimeCountArr))
         .classed("line dark-red", true)
+
+    // Creating title
+    lineGroup.append("text")
+        .attr("transform", `translate(${chartWidth * 0.43}, -10)`)
+        .attr("y", 0)
+        .attr("x", 0)
+        .text("Crime Count by Date")
 
      // Creating axes labels
      lineGroup.append("text")
@@ -263,7 +272,7 @@ function crimeLineGraph(crimeData){
         .append("circle")
         .attr("cx", d => xTimeScale(parseTime(d[0])))
         .attr("cy", d => yLinearScale(d[1]))
-        .attr("r", "8")
+        .attr("r", "4")
         .attr("fill", "gold")
         .attr("stroke-width", "1")
         .attr("stroke", "black")
@@ -273,7 +282,7 @@ function crimeLineGraph(crimeData){
         d3.select(this)
           .transition()
           .duration(600)
-          .attr("r", "14")
+          .attr("r", "8")
           .attr("fill", "red")
         toolTip.show(d, this)
     })
@@ -281,7 +290,7 @@ function crimeLineGraph(crimeData){
             d3.select(this)
               .transition()
               .duration(600)
-              .attr("r", "8")
+              .attr("r", "4")
               .attr("fill", "gold")
             toolTip.hide(d, this)
         })
@@ -344,6 +353,13 @@ function crimeBarChart(crimeData){
         .attr("y", 0)
         .attr("x", 8)
         .attr("dy", ".35em")
+
+    // Creating title
+    chartGroup.append("text")
+        .attr("transform", `translate(${chartWidth * 0.35}, -10)`)
+        .attr("y", 0)
+        .attr("x", 0)
+        .text("Crime Count by Offense Category")
 
     // Creating axes labels
     chartGroup.append("text")
@@ -483,12 +499,11 @@ function heatMapChart(crimeData) {
         .range(["white", "#CC0000"])
 
     // Creating title
-    // heatGroup.append("text")
-    //     .attr("transform", `translate(${chartWidth * 0.5}, 200`)
-    //     .attr("y", 0 + margin.left)
-    //     .attr("x", )
-    //     .text("Heatmap of Crime Occurences throughout the Day and Time")
-
+    heatGroup.append("text")
+        .attr("transform", `translate(${chartWidth * 0.25}, -25)`)
+        .attr("y", 0)
+        .attr("x", 0)
+        .text("Heatmap of Crime Occurences throughout the Day and Time")
     
     // Creating axes labels
     heatGroup.append("text")

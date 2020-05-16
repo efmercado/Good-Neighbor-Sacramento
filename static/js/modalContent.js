@@ -44,8 +44,8 @@ function modalContentChange(district){
                   beatInfo = data.filter(function(d){ return (d.beat == beatCrimeCount2[i][j][1] && d.district == district) })
                   
                   topCounter++;
-                  console.log("Top " + topCounter);
-                  console.log( beatCrimeCount2[i][j][0] + beatCrimeCount2[i][j][1] + " = "+ beatCrimeCount2[i][1]);
+                  // console.log("Top " + topCounter);
+                  // console.log( beatCrimeCount2[i][j][0] + beatCrimeCount2[i][j][1] + " = "+ beatCrimeCount2[i][1]);
 
                   d3.select('#safetyranking')
                   .append('br');
@@ -65,7 +65,7 @@ function modalContentChange(district){
           }
         })
 
-      console.log(districtName);
+      // console.log(districtName);
 
       // Sets the district's overview title
       d3.select('#overview-title').html("");
@@ -84,7 +84,7 @@ function modalContentChange(district){
       // console.log(zips);
 
       district_zips.forEach(function(item) {
-        console.log(item.Zip_Code);
+        // console.log(item.Zip_Code);
         zips.push(item.Zip_Code);
       })
 
@@ -96,7 +96,7 @@ function modalContentChange(district){
 
       uniqueZips = unique(zips);
 
-      console.log(uniqueZips);
+      // console.log(uniqueZips);
 
 
       uniqueZips.forEach(function(item){
@@ -111,17 +111,17 @@ function modalContentChange(district){
     d3.json("/sac_realestate", function(data) {
 
       realEstate = data.filter(function(d){ return (uniqueZips.includes(d.postal_code))});
-      console.log(realEstate);
+      // console.log(realEstate);
 
 
       var medListingPrice = d3.median(realEstate, function(d) { return d.median_listing_price; });
-      console.log(medListingPrice);
+      // console.log(medListingPrice);
       medListingPrice = numberWithCommas(medListingPrice);
       document.getElementById("listingprice").innerHTML = `$ ${medListingPrice} `;
       
 
       var avgDaysInMarket = d3.mean(realEstate, function(d) { return d.median_days_on_market; });
-      console.log(avgDaysInMarket);
+      // console.log(avgDaysInMarket);
       avgDaysInMarket = avgDaysInMarket.toFixed(2);
       document.getElementById("daysinmarket").innerHTML = `${avgDaysInMarket} `;
 

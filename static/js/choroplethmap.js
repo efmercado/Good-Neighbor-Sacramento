@@ -47,12 +47,9 @@ d3.json(link, function(data) {
 
     // Grouping crime data by Beat
     const groupedBeat = _.groupBy(crimeData, 'Beat')
-    console.log(groupedBeat)
-    console.log("groupedBeat", groupedBeat)
 
     // Creating an array of offense for each Beat
     const crimeByBeat =  _.mapValues(groupedBeat, items => _.map(items, 'Offense_Category'))
-    console.log("crimeBybeat", crimeByBeat)
   
     // Counting the number of offenses for each beat and storing in a dictionary
     var beatDictionary = {}
@@ -63,12 +60,8 @@ d3.json(link, function(data) {
            
     })
     
-    console.log(beatDictionary)
-
-
     // Converting beatDictionary into an array
     var beatArr = Object.entries(beatDictionary)
-    console.log("beatArr", beatArr)
     
     // Storing beat and offense count into an array of arrays
     var beatCrimeCount = []
@@ -76,11 +69,6 @@ d3.json(link, function(data) {
 
         beatCrimeCount.push([beatArr[i][0], objectIter(beatArr)[i]])
     }
-    console.log("beatCrimeCount", beatCrimeCount)
-
-    //console.log(beatCrimeCount);
-   
-    //console.log(arr);
 
     // First sorting beatCrimeCount by letter
     beatCrimeCount.sort(function(a,b){
@@ -96,9 +84,7 @@ d3.json(link, function(data) {
         return a[0][0] - b[0][0];
     });
 
-    console.log("1", beatCrimeCount)
     //Joy's Code
-
     
     beatCrimeCount2 = [... beatCrimeCount];
 
@@ -106,37 +92,35 @@ d3.json(link, function(data) {
       return a[1] - b[1];
     });
 
-    console.log("2", beatCrimeCount2);
-    //console.log(beatCrimeCount2);
-
-    
-
     //End: Joy's code
-    console.log("daataaa", data)
-    console.log(data.features)
-
-    testData = data.features
-    data.features.forEach(property => console.log(property.properties))
 
     // Creating a new GeoJSON dictionary/object that will hold crime count by beat
     dataDictionary = data.features.map(object => object.properties)
-    console.log("geoJson", data)
-    console.log("dataDictionary", dataDictionary)
-        // Sorting the geoJson data
-    // var data = data.features.map(property => property.properties)
 
-    // console.log("daataaa", data)
-    // data.sort(function(a,b){
+    // Sorting dataDictionary by letter
+    dataDictionary.sort(function(a,b){
       
-    //   if(a.BEAT[0][1] < b.BEAT[0][1]) { return -1; }
-    //   if(a.BEAT[0][1] > b.BEAT[0][1]) { return 1; }
+      if(a.BEAT[1] < b.BEAT[1]) { return -1; }
+      if(a.BEAT[1] > b.BEAT[1]) { return 1; }
 
-    //     return 0;
-    // });
+        return 0;
+    });
 
-    
-    // Adding the crime count by beat onto the GeoJSON dictionary/object
-    beatCrimeCount.forEach((item, i) => dataDictionary[i]["Crime__Count"] = item[1])
+    // Sorting once again by number
+    dataDictionary.sort(function(a,b) {
+      return a.BEAT[0] - b.BEAT[0];
+    });
+
+   // Adding the crime count by beat onto the GeoJSON dictionary/object
+    for(var i=0; i<beatCrimeCount.length; i++){
+      for(var j=0; j<dataDictionary.length; j++){
+        if(beatCrimeCount[i][0] === dataDictionary[j].BEAT){
+        dataDictionary[j]["Crime__Count"] = beatCrimeCount[i][1]
+      }
+      }
+      
+    }
+    // beatCrimeCount.forEach((item, i) => dataDictionary[i]["Crime__Count"] = item[1])
   
 // ---------------------------------------------------------------------------------------- //
         
