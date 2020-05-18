@@ -8,8 +8,6 @@ function modalContentChange(district){
   document.getElementById("listingprice").innerHTML = "";
   document.getElementById("daysinmarket").innerHTML = "";
   
-  
-
     d3.json("/districts_beats", function(data) {
       data.filter(function(d){
       
@@ -22,14 +20,10 @@ function modalContentChange(district){
           d3.select('#safetyranking')
           .append("h3").text('Neighborhood Safety Ranking');
 
-          var elem = document.createElement("img");
+          // var elem = document.createElement("img");
           var src = `../static/img/district${district}.jpg`;
-          elem.src = `../static/img/district${district}.jpg`;
-          elem.classList.add = 'img-thumbnail-xx';
-    
-          d3.select('#safetyranking')
-          .append('br')
-          .append('br');
+          // elem.src = `../static/img/district${district}.jpg`;
+          // elem.classList.add = 'img-thumbnail-xx';
 
           d3.select('#safetyranking')
           .append('img')
@@ -44,11 +38,9 @@ function modalContentChange(district){
                   beatInfo = data.filter(function(d){ return (d.beat == beatCrimeCount2[i][j][1] && d.district == district) })
                   
                   topCounter++;
-                  console.log("Top " + topCounter);
-                  console.log( beatCrimeCount2[i][j][0] + beatCrimeCount2[i][j][1] + " = "+ beatCrimeCount2[i][1]);
 
-                  d3.select('#safetyranking')
-                  .append('br');
+                  // d3.select('#safetyranking')
+                  // .append('br');
                   d3.select('#safetyranking')
                   .append('br');
 
@@ -57,15 +49,13 @@ function modalContentChange(district){
                   .append("h5").text('#' + topCounter + ' Beat ' + beatCrimeCount2[i][j][1] + ' - ' + beatInfo[0].neighborhood);
 
                   d3.select('#safetyranking')
-                  .append("h7").text('Crime Count : ' + beatCrimeCount2[i][1]);
+                  .append("h6").text('Crime Count : ' + beatCrimeCount2[i][1]);
 
                 }
               }
             }
           }
         })
-
-      console.log(districtName);
 
       // Sets the district's overview title
       d3.select('#overview-title').html("");
@@ -79,12 +69,9 @@ function modalContentChange(district){
 
       district_zips = data.filter(function(d){ return (d.Police_District == district)})
 
-      // console.log(district_zips);
       // zips.push(district_zips.Zip_Code);
-      // console.log(zips);
 
       district_zips.forEach(function(item) {
-        console.log(item.Zip_Code);
         zips.push(item.Zip_Code);
       })
 
@@ -96,32 +83,22 @@ function modalContentChange(district){
 
       uniqueZips = unique(zips);
 
-      console.log(uniqueZips);
-
-
       uniqueZips.forEach(function(item){
         document.getElementById("zipcodes").innerHTML += `${item} `;
       });
-
-
-      
 
     });
 
     d3.json("/sac_realestate", function(data) {
 
       realEstate = data.filter(function(d){ return (uniqueZips.includes(d.postal_code))});
-      console.log(realEstate);
-
 
       var medListingPrice = d3.median(realEstate, function(d) { return d.median_listing_price; });
-      console.log(medListingPrice);
       medListingPrice = numberWithCommas(medListingPrice);
       document.getElementById("listingprice").innerHTML = `$ ${medListingPrice} `;
       
 
       var avgDaysInMarket = d3.mean(realEstate, function(d) { return d.median_days_on_market; });
-      console.log(avgDaysInMarket);
       avgDaysInMarket = avgDaysInMarket.toFixed(2);
       document.getElementById("daysinmarket").innerHTML = `${avgDaysInMarket} `;
 
@@ -129,15 +106,5 @@ function modalContentChange(district){
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       }
 
-
-
-
     });
-
-    
-    
-
-
-    
-
 }

@@ -1,13 +1,13 @@
-var crime ="https://services5.arcgis.com/54falWtcpty3V47Z/arcgis/rest/services/general_offenses_year3/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json"
+var crime ="https://services5.arcgis.com/54falWtcpty3V47Z/arcgis/rest/services/general_offenses_year3/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&resultType=standard&f=json"
 var crimeData;
 var dataTest;
 
 // Setting up our chart
-var svgWidth = 800;
-var svgHeight = 500;
+var svgWidth = 775;
+var svgHeight = 400;
 
 var margin = {
-    top: 20,
+    top: 40,
     bottom: 120,
     left: 60,
     right: 40
@@ -104,9 +104,8 @@ function handleDistrictChange(value) {
 
 function whenClicked(e) {
     // e = event
-    console.log(e.target.feature.properties.DISTRICT);
     var district = e.target.feature.properties.DISTRICT;
-    console.log(district);
+
     handleDistrictChange(district);
 
     modalContentChange(district);
@@ -167,7 +166,7 @@ function objectIter(arr){
 function crimeLineGraph(crimeData){
 
     var svgLine = d3.select("#line-graph").append("svg")
-        .classed("svgBar", true)
+        .classed("svgLine", true)
         .attr("width", svgWidth)
         .attr("height", svgHeight);
 
@@ -194,7 +193,7 @@ function crimeLineGraph(crimeData){
     }
 
     // Using d3 to create a callback function that will parse and convert a string back to a date
-    var parseTime = d3.timeParse("%Y-%e-%d");
+    var parseTime = d3.timeParse("%Y-%m-%d");
 
     // Creating a x-axis time scale callback function
     var xTimeScale = d3.scaleTime()
@@ -229,6 +228,14 @@ function crimeLineGraph(crimeData){
         .attr("d", drawLine(crimeCountArr))
         .classed("line dark-red", true)
 
+    // Creating title
+    lineGroup.append("text")
+        .attr("transform", `translate(${chartWidth * 0.40}, -20)`)
+        .attr("y", 0)
+        .attr("x", 0)
+        .text("Crime Count by Date")
+        .attr("font-size", 20)
+
      // Creating axes labels
      lineGroup.append("text")
         .attr("transform", "rotate(-90)")
@@ -262,7 +269,7 @@ function crimeLineGraph(crimeData){
         .append("circle")
         .attr("cx", d => xTimeScale(parseTime(d[0])))
         .attr("cy", d => yLinearScale(d[1]))
-        .attr("r", "8")
+        .attr("r", "4")
         .attr("fill", "gold")
         .attr("stroke-width", "1")
         .attr("stroke", "black")
@@ -272,7 +279,7 @@ function crimeLineGraph(crimeData){
         d3.select(this)
           .transition()
           .duration(600)
-          .attr("r", "14")
+          .attr("r", "8")
           .attr("fill", "red")
         toolTip.show(d, this)
     })
@@ -280,7 +287,7 @@ function crimeLineGraph(crimeData){
             d3.select(this)
               .transition()
               .duration(600)
-              .attr("r", "8")
+              .attr("r", "4")
               .attr("fill", "gold")
             toolTip.hide(d, this)
         })
@@ -343,6 +350,14 @@ function crimeBarChart(crimeData){
         .attr("y", 0)
         .attr("x", 8)
         .attr("dy", ".35em")
+
+    // Creating title
+    chartGroup.append("text")
+        .attr("transform", `translate(${chartWidth * 0.30}, -20)`)
+        .attr("y", 0)
+        .attr("x", 0)
+        .text("Crime Count by Offense Category")
+        .attr("font-size", 20)
 
     // Creating axes labels
     chartGroup.append("text")
@@ -413,12 +428,12 @@ function heatMapChart(crimeData) {
     })
 
     // Creating a pseudo callback function to format the js datetime object 
-    const hour = item => moment(item.Occurence_Date).format('hh a')
+    const hour = item => moment(item.Occurence_Date).format('hha')
 
     // Creating an additional callback function that will also format the js datetime object
     const timeGroups = (() => {
         const dayName = (item) => moment(item.Occurence_Date).format('ddd'),
-              hour = (item) => moment(item.Occurence_Date).format('hh a')
+              hour = (item) => moment(item.Occurence_Date).format('hha')
         return {
             dayName,
             hour
@@ -449,9 +464,9 @@ function heatMapChart(crimeData) {
 
     // Labels for x and y axis
     var myVars = ["Wed", "Thu", "Fri", "Sat", "Sun", "Mon", "Tue"]
-    var myGroups = ["12 am", "01 am", "02 am", "03 am", "04 am", "05 am", "06 am", "07 am", "08 am", "09 am",
-    "10 am", "11 am", "12 pm", "01 pm", "02 pm", "03 pm", "04 pm", "05 pm", "06 pm", "07 pm", 
-    "08 pm", "09 pm", "10 pm", "11 pm",]
+    var myGroups = ["12am", "01am", "02am", "03am", "04am", "05am", "06am", "07am", "08am", "09am",
+    "10am", "11am", "12pm", "01pm", "02pm", "03pm", "04pm", "05pm", "06pm", "07pm", 
+    "08pm", "09pm", "10pm", "11pm"]
 
 
     // Building the x scales and axis:
@@ -481,6 +496,14 @@ function heatMapChart(crimeData) {
         .domain([1,40])
         .range(["white", "#CC0000"])
 
+    // Creating title
+    heatGroup.append("text")
+        .attr("transform", `translate(${chartWidth * 0.15}, -25)`)
+        .attr("y", 0)
+        .attr("x", 0)
+        .text("Heatmap of Crime Occurences throughout the Day and Time")
+        .attr("font-size", 20)
+    
     // Creating axes labels
     heatGroup.append("text")
         .attr("transform", "rotate(-90)")
