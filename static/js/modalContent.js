@@ -16,9 +16,8 @@ function modalContentChange(district){
           districtName = d.district_name;
 
           d3.select('#safetyranking').html("");
+          d3.select('#safetyranking2').html("");
 
-          d3.select('#safetyranking')
-          .append("h3").text('Neighborhood Safety Ranking');
 
           // var elem = document.createElement("img");
           var src = `../static/img/district${district}.jpg`;
@@ -41,14 +40,14 @@ function modalContentChange(district){
 
                   // d3.select('#safetyranking')
                   // .append('br');
-                  d3.select('#safetyranking')
+                  d3.select('#safetyranking2')
                   .append('br');
 
 
-                  d3.select('#safetyranking')
+                  d3.select('#safetyranking2')
                   .append("h5").text('#' + topCounter + ' Beat ' + beatCrimeCount2[i][j][1] + ' - ' + beatInfo[0].neighborhood);
 
-                  d3.select('#safetyranking')
+                  d3.select('#safetyranking2')
                   .append("h6").text('Crime Count : ' + beatCrimeCount2[i][1]);
 
                 }
@@ -60,7 +59,7 @@ function modalContentChange(district){
       // Sets the district's overview title
       d3.select('#overview-title').html("");
       d3.select('#overview-title')
-          .append("h3").text(`District ${district}: ${districtName} | Overview`);
+          .append("h2").text(`District ${district}: ${districtName} | Overview`);
 
     });
 

@@ -248,7 +248,8 @@ d3.json(link, function(data) {
         center: [38.5816, -121.4944],
         zoom: 10,
         layers: [runBikeHike, district],
-        zoomControl: false
+        zoomControl: false,
+        draggable: false
       });
 
       L.control.layers(mainBaseMaps, mainOverlayMaps, {
@@ -259,6 +260,8 @@ d3.json(link, function(data) {
         center: [38.5716, -121.4944],
         zoom: 10,
         layers: [light, geojson],
+        zoomControl: false,
+        draggable: false
       });
 
       L.control.layers(modalBaseMaps, modalOverlayMaps, {
